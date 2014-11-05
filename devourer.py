@@ -1,8 +1,10 @@
-from deletebot_credentials import twitter_access, dropbox_access
-
 import dropbox
 import datetime
+import json
+import os
 import tweepy
+
+from deletebot_credentials import twitter_access, dropbox_access
 
 
 # Custom Settings:
@@ -13,35 +15,31 @@ DELAY_BETWEEN_REQS = 45
 # Tweets to save forever:
 IDS_TO_KEEP = []
 
-# Important constants to not mess around with:
-API_TWEET_MAX = 3200
-TWEETS_PER_PAGE = 200
-NUM_PAGES = int(API_TWEET_MAX / TWEETS_PER_PAGE)
-
 
 def main():
 
-    n = datetime.datetime()
+    n = datetime.datetime.now()
 
-    ckey = access['consumer_key']
-    csecret = access['consumer_secret']
-    tkey = access['access_token_key']
-    tsecret = access['access_token_secret']
+    ckey = twitter_access['consumer_key']
+    csecret = twitter_access['consumer_secret']
+    tkey = twitter_access['access_token_key']
+    tsecret = twitter_access['access_token_secret']
 
     auth = tweepy.OAuthHandler(ckey, csecret)
     auth.set_access_token(tkey, tsecret)
-
     api = tweepy.API(auth)
     user = api.me()
 
-    dropbox_tweets = []
     errors = []
     for page in tweepy.Cursor(api.user_timeline, id=user.id, count=200).pages():
         for tweet in page:
             try:
                 delta = tweet.created_at - n
-                if delta.days > MAX_AGE_IN_DAYS:
-                    dropbox_tweets.append(tweet)
+                if tweet.id in IDS_TO_KEEP:
+                    continue
+                elif delta.days > MAX_AGE_IN_DAYS:
+                    clean_tweet = clean_up_tweet(tweet)
+                    response = upload_to_dropbox(clean_tweet, 'tweet')
                     api.destroy_status(tweet.id)
                     time.sleep(DELAY_BETWEEN_DELETES)
                 else:
@@ -51,15 +49,42 @@ def main():
 
             time.sleep(DELAY_BETWEEN_REQS)
 
-    upload_to_dropbox(dropbox_tweets, errors)
+    return errors
 
 
+def clean_up_tweet(tweet):
+
+    clean_tweet = {
+        'id': tweet.id,
+        'created_at': str(tweet.created_at),
+        'text': tweet.text,
+        'user_name': tweet.user.screen_name,
+        'retweet_count': tweet.retweet_count,
+        'favorite_count': tweet.favorite_count,
+        'in_reply_to_screen_name': tweet.in_reply_to_screen_name,
+        'in_reply_to_user_id': tweet.in_reply_to_user_id,
+        'in_reply_to_status_id': tweet.in_reply_to_status_id,
+    }
+
+    return clean_tweet
 
 
+def upload_to_dropbox(tweet):
 
+    filename = str(obj['id']) + '.json'
+    f = open(filename, 'wb')
+    json.dump(obj, f)
+    f.close()
 
-def upload_to_dropbox(tweets, errors):
-    pass
+    #
+    client = dropbox.client.DropboxClient(dropbox_access)
+    f = open(filename, 'rb')
+    response = client.put_file(filename, f)
+    f.close()
+    # Delete file
+    os.remove(filename)
+
+    return response
 
 
 if __name__ == '__main__':
