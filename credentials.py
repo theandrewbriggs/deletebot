@@ -11,7 +11,7 @@
 # When you register your app with dev.twitter.com, you'll
 # need to generate an access token. Fill in the following
 # strings with the correct info below.
-access = {
+twitter_access = {
     'consumer_key': '',
     'consumer_secret': '',
     'access_token_key': '',
