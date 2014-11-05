@@ -1,0 +1,2 @@
+dropbox==2.2.0
+tweepy==2.3.0
