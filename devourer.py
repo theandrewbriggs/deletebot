@@ -4,7 +4,7 @@ import json
 import os
 import tweepy
 
-from deletebot_credentials import twitter_access, dropbox_access
+from credentials import twitter_access, dropbox_access
 
 
 # Custom Settings:
