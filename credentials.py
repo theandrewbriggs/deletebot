@@ -4,9 +4,11 @@
 # DO NOT SHARE INFORMATION IN THIS FILE.
 # It should remain private.
 # That includes uploading it to Github. (Don't do it!)
+# Add 'credentials.py' to the .gitignore if you're gonna
+# push back to Github at all.
 #
 #
-# TWITTER
+# TWITTER CREDENTIALS
 #
 # When you register your app with dev.twitter.com, you'll
 # need to generate an access token. Fill in the following
@@ -17,8 +19,8 @@ twitter_access = {
     'access_token_key': '',
     'access_token_secret': '',
 }
-
-# DROPBOX
+#
+# DROPBOX CREDENTIALS
 #
 # Dropbox uses similar authentication as Twitter, but
 # it just requires a single access key. When you create
