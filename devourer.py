@@ -38,8 +38,9 @@ def main():
                 if tweet.id in IDS_TO_KEEP:
                     continue
                 elif delta.days > MAX_AGE_IN_DAYS:
-                    clean_tweet = clean_up_tweet(tweet)
-                    response = upload_to_dropbox(clean_tweet, 'tweet')
+                    if dropbox_access:
+                        clean_tweet = clean_up_tweet(tweet)
+                        response = upload_to_dropbox(clean_tweet, 'tweet')
                     api.destroy_status(tweet.id)
                     time.sleep(DELAY_BETWEEN_DELETES)
                 else:

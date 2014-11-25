@@ -10,7 +10,7 @@
 #
 # TWITTER CREDENTIALS
 #
-# When you register your app with dev.twitter.com, you'll
+# When you register your app with apps.twitter.com, you'll
 # need to generate an access token. Fill in the following
 # strings with the correct info below.
 twitter_access = {
