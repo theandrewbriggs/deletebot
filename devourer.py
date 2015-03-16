@@ -9,6 +9,8 @@ from credentials import twitter_access, dropbox_access
 
 # Custom Settings:
 MAX_AGE_IN_DAYS = 7
+
+# Built-in settings
 DELAY_BETWEEN_DELETES = 0.5
 DELAY_BETWEEN_REQS = 45
 
