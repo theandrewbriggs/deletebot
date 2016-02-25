@@ -22,7 +22,7 @@ If you want to set up an app that regularly deletes your old tweets (rather than
 ## Local delete
 
 - Install Pip, follow the directions [here](http://pip.readthedocs.org/en/stable/installing).
-- In the Terminal, run `pip install tweepy`.
+- In the Terminal, run `pip install tweepy`. (**N.B.** - You may run into issues installing Tweepy on OS X El Capitan, this command served as a quickfix: `sudo pip install tweepy --upgrade --ignore-installed six`)
 - From the project folder, type `python delete_all.py` and hit return. The script will output information about the delete process, and you must keep Terminal open and your computer on while this is going on (though you can let it run in the background while you do other stuff). 
 
 
